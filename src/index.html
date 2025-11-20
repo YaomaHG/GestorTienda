@@ -1,26 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Ionic App</title>
-
+  <title>Admin Tareas</title>
   <base href="/" />
 
-  <meta name="color-scheme" content="light dark" />
-  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- Meta básicas -->
+  <meta name="description" content="Aplicación para organizar tareas con categorías, prioridades, estados, calendario y recordatorios." />
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="color-scheme" content="light dark" />
+  <!-- theme-color omitido para evitar warnings de compatibilidad -->
 
-  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
-
-  <!-- add to homescreen for ios -->
+  <!-- PWA / Instalación -->
+  <link rel="manifest" href="manifest.webmanifest" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-</head>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Admin Tareas" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
+  <!-- Iconos -->
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/icon/favicon.png" />
+
+  <!-- Seguridad básica -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- SEO adicional -->
+  <meta name="keywords" content="tareas, productividad, calendario, recordatorios, ionic" />
+  <meta name="author" content="AdminTareas" />
+</head>
 <body>
   <app-root></app-root>
+  <noscript>Necesitas habilitar JavaScript para usar esta aplicación.</noscript>
 </body>
-
 </html>

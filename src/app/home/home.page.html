@@ -1,25 +1,217 @@
-<!-- Toolbar con botón para abrir el menú lateral -->
+<!-- ===========================
+             ENCABEZADO
+=========================== -->
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Inicio</ion-title>
-  </ion-toolbar>
-  </ion-header>
 
-<!-- Tarjeta simple con datos de la tienda -->
-<ion-content class="ion-padding">
-  <ion-list *ngIf="user() as u">
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <img [src]="u.storeImageUrl || fallbackUrl" (error)="onStoreImgError($event)" alt="store" />
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ u.storeName }}</h2>
-        <p>Bienvenido/a @{{ u.username }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-  <p>Usa el menú para navegar a Productos y Clientes.</p>
+  <!-- Título -->
+  <ion-toolbar class="title">
+    <ion-title>Tareas</ion-title>
+    <ion-searchbar placeholder="Buscar" (ionInput)="buscarCambio($event)"></ion-searchbar>
+  </ion-toolbar>
+
+
+  <!-- Segmento Lista / Calendario -->
+  <ion-toolbar>
+    <ion-segment value="lista" (ionChange)="cambiarVista($event)">
+      <ion-segment-button value="lista">Lista</ion-segment-button>
+      <ion-segment-button value="calendario">Calendario</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <!-- Filtros (solo vista Lista) -->
+  <ion-toolbar *ngIf="vista === 'lista'">
+    <ion-select interface="popover" placeholder="Categoría" (ionChange)="seleccionarCategoria($event)">
+      <ion-select-option [value]="null">Todas</ion-select-option>
+      <ion-select-option [value]="Categoria.Personal">Personal</ion-select-option>
+      <ion-select-option [value]="Categoria.Trabajo">Trabajo</ion-select-option>
+      <ion-select-option [value]="Categoria.Social">Social</ion-select-option>
+    </ion-select>
+    <ion-select interface="popover" placeholder="Prioridad" (ionChange)="seleccionarPrioridad($event)">
+      <ion-select-option [value]="null">Todas</ion-select-option>
+      <ion-select-option [value]="Prioridad.Baja">Baja</ion-select-option>
+      <ion-select-option [value]="Prioridad.Media">Media</ion-select-option>
+      <ion-select-option [value]="Prioridad.Alta">Alta</ion-select-option>
+    </ion-select>
+    <ion-select interface="popover" placeholder="Estado" (ionChange)="seleccionarEstado($event)">
+      <ion-select-option [value]="null">Todos</ion-select-option>
+      <ion-select-option [value]="Estado.Inicial">Inicial</ion-select-option>
+      <ion-select-option [value]="Estado.EnEjecucion">En ejecución</ion-select-option>
+      <ion-select-option [value]="Estado.Finalizada">Finalizada</ion-select-option>
+    </ion-select>
+  </ion-toolbar>
+
+  <!-- Selector de fecha (solo vista Calendario) -->
+  <ion-toolbar *ngIf="vista === 'calendario'" class="date-toolbar">
+    <ion-datetime presentation="date" (ionChange)="fechaCambio($event)" class="date-picker"></ion-datetime>
+  </ion-toolbar>
+
+
+  <!-- Exportar / Importar -->
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="exportarJSON()">
+        <ion-icon slot="start" name="cloud-download"></ion-icon>
+        Exportar
+      </ion-button>
+      <ion-button (click)="abrirImportar()">
+        <ion-icon slot="start" name="cloud-upload"></ion-icon>
+        Importar
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+
+
+<!-- ===========================
+              CONTENIDO
+=========================== -->
+<ion-content>
+
+  <!-- Vista Lista -->
+  <ng-container *ngIf="vista === 'lista'; else vistaCalendario">
+
+    <ion-reorder-group disabled="false" (ionItemReorder)="reordenar($event)">
+
+      <ion-list *ngIf="(tareasFiltradas$ | async) as tareas; else vacio">
+
+        <ion-item-sliding *ngFor="let t of tareas; let i = index">
+
+          <ion-item>
+
+            <ion-reorder slot="start"></ion-reorder>
+
+            <ion-checkbox slot="start" [checked]="t.completada" (ionChange)="alternarTarea(t)">
+            </ion-checkbox>
+
+            <ion-label (click)="editarTarea(t)">
+              <h2>
+                {{ t.titulo }}
+                <ion-badge [color]="
+            t.prioridad === 'alta'  ? 'danger' :
+            t.prioridad === 'media' ? 'warning' :
+            'medium'
+          ">
+                  {{ t.prioridad }}
+                </ion-badge>
+              </h2>
+
+              <p *ngIf="t.descripcion">{{ t.descripcion }}</p>
+              <p *ngIf="t.fechaHora">{{ t.fechaHora | date:'short' }}</p>
+            </ion-label>
+
+            <!-- 🔥 BOTÓN SIEMPRE VISIBLE -->
+            <ion-button slot="end" color="danger" fill="clear" (click)="eliminarTarea(t)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+
+          </ion-item>
+
+          <!-- Opciones deslizables (opcionales) -->
+          <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="editarTarea(t)">
+              Editar
+            </ion-item-option>
+
+            <ion-item-option color="danger" (click)="eliminarTarea(t)">
+              Eliminar
+            </ion-item-option>
+          </ion-item-options>
+
+        </ion-item-sliding>
+
+
+      </ion-list>
+
+    </ion-reorder-group>
+
+  </ng-container>
+
+
+
+  <!-- Estado vacío -->
+  <ng-template #vacio>
+    <ion-text class="ion-padding">Sin tareas</ion-text>
+  </ng-template>
+
+
+
+  <!-- Vista Calendario -->
+  <ng-template #vistaCalendario>
+
+    <ion-list *ngIf="(tareasDelDia$ | async) as tareasDia; else vacio">
+
+      <ion-item-sliding *ngFor="let t of tareasDia">
+
+        <ion-item>
+
+          <ion-checkbox slot="start" [checked]="t.completada" (ionChange)="alternarTarea(t)">
+          </ion-checkbox>
+
+          <ion-label (click)="editarTarea(t)">
+            <h2>{{ t.titulo }}</h2>
+            <p *ngIf="t.fechaHora">
+              {{ t.fechaHora | date:'shortTime' }}
+            </p>
+          </ion-label>
+
+        </ion-item>
+
+        <ion-item-options side="end">
+
+          <ion-item-option color="tertiary">
+            <ion-datetime size="cover" presentation="time" (ionChange)="reprogramar(t, $event)">
+            </ion-datetime>
+          </ion-item-option>
+
+          <ion-item-option color="primary" (click)="editarTarea(t)">
+            Editar
+          </ion-item-option>
+
+          <ion-item-option color="danger" (click)="eliminarTarea(t)">
+            Eliminar
+          </ion-item-option>
+
+        </ion-item-options>
+
+      </ion-item-sliding>
+
+    </ion-list>
+
+  </ng-template>
+
+
+
+  <!-- FAB Crear Tarea -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="nuevaTarea()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- FAB Accesibilidad -->
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+
+    <ion-fab-button color="medium">
+      <ion-icon name="accessibility"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-list side="top">
+      <ion-fab-button size="small" (click)="alternarTextoGrande()" title="Texto grande">
+        <ion-icon name="text"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button size="small" (click)="alternarAltoContraste()" title="Alto contraste">
+        <ion-icon name="contrast"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+
+  </ion-fab>
+
 </ion-content>
+
+
+
+<!-- Input oculto para importar JSON -->
+<input type="file" accept="application/json" hidden #archivo (change)="importarDesdeArchivo($event)" />

@@ -34,4 +34,124 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+/* ================================
+      TEXTO GRANDE REAL
+================================ */
+body.texto-grande {
+  font-size: 1.25rem !important;
+
+  ion-title {
+    font-size: 2.4rem !important;
+    font-weight: 800;
+  }
+
+  ion-item,
+  ion-label,
+  ion-text,
+  ion-button,
+  ion-select,
+  ion-searchbar,
+  ion-input {
+    font-size: 1.35rem !important;
+  }
+
+  ion-badge {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ================================
+      ALTO CONTRASTE GLOBAL REAL
+================================ */
+body.alto-contraste {
+  /* Tema global */
+  --ion-background-color: #000 !important;
+  --ion-background-color-rgb: 0, 0, 0 !important;
+
+  --ion-text-color: #fff !important;
+  --ion-text-color-rgb: 255, 255, 255 !important;
+
+  /* Colores principales */
+  --ion-color-primary: #ffd700 !important;
+  --ion-color-primary-rgb: 255, 215, 0 !important;
+  --ion-color-primary-contrast: #000 !important;
+
+  --ion-color-secondary: #ffffff !important;
+  --ion-color-tertiary: #ffd700 !important;
+
+  /* Fondos Ionic */
+  --ion-item-background: #000 !important;
+  --ion-toolbar-background: #000 !important;
+  --ion-card-background: #000 !important;
+  --ion-tab-bar-background: #000 !important;
+  --ion-color-step-50: #111 !important;
+  --ion-color-step-100: #222 !important;
+  --ion-color-step-150: #333 !important;
+  --ion-color-step-200: #444 !important;
+  --ion-color-step-250: #555 !important;
+  --ion-color-step-300: #666 !important;
+  --ion-color-step-350: #777 !important;
+  --ion-color-step-400: #888 !important;
+  --ion-color-step-450: #999 !important;
+  --ion-color-step-500: #aaa !important;
+  --ion-color-step-550: #b7b7b7 !important;
+  --ion-color-step-600: #c4c4c4 !important;
+  --ion-color-step-650: #d1d1d1 !important;
+  --ion-color-step-700: #dedede !important;
+  --ion-color-step-750: #ebebeb !important;
+  --ion-color-step-800: #f8f8f8 !important;
+  --ion-color-step-850: #fbfbfb !important;
+  --ion-color-step-900: #fdfdfd !important;
+  --ion-color-step-950: #fefefe !important;
+
+  /* Headers que sí se notan */
+  ion-toolbar,
+  ion-header {
+    background: #000 !important;
+    color: #ffd700 !important;
+    border-bottom: 2px solid #ffd700 !important;
+  }
+
+  /* Searchbar agresiva */
+  ion-searchbar {
+    --background: #111 !important;
+    --color: #ffd700 !important;
+    --placeholder-color: #ffc400 !important;
+    filter: brightness(1.4);
+  }
+
+  /* Items visibles */
+  ion-item {
+    border-bottom: 1px solid #333 !important;
+    color: #fff !important;
+  }
+
+  /* Botones en amarillo */
+  ion-button {
+    --background: #ffd700 !important;
+    --color: #000 !important;
+    font-weight: 700;
+  }
+
+  /* Checkbox */
+  ion-checkbox {
+    --checkbox-background: #000 !important;
+    --border-color: #ffd700 !important;
+    --checkmark-color: #000000 !important;
+  }
+
+  /* Badges */
+  ion-badge {
+    background: #ffd700 !important;
+    color: #000 !important;
+    font-weight: bold;
+  }
+
+  /* FAB */
+  ion-fab-button {
+    --background: #ffd700 !important;
+    --color: #000 !important;
+  }
+}

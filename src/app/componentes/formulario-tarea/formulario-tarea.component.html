@@ -1,0 +1,74 @@
+<!-- Modal de creación/edición de tarea -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ tarea ? 'Editar Tarea' : 'Nueva Tarea' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Formulario reactivo. (ngSubmit) delega en el método guardar() -->
+  <form (ngSubmit)="guardar()" [formGroup]="formulario">
+    <ion-list lines="full">
+      <ion-item>
+        <!-- Título obligatorio con validación mínima -->
+        <ion-input label="Título" labelPlacement="stacked" formControlName="titulo" placeholder="Ingresa título"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched">Título requerido (mínimo 3 caracteres)</ion-note>
+
+      <ion-item>
+        <!-- Descripción opcional -->
+        <ion-textarea label="Descripción" labelPlacement="stacked" formControlName="descripcion" autoGrow="true"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <!-- Fecha y hora de vencimiento (IonDatetime) -->
+        <ion-datetime presentation="date-time" formControlName="fechaHora" label="Fecha y hora" labelPlacement="stacked"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <!-- Prioridad de la tarea -->
+        <ion-select label="Prioridad" labelPlacement="stacked" formControlName="prioridad">
+          <ion-select-option [value]="Prioridad.Baja">Baja</ion-select-option>
+          <ion-select-option [value]="Prioridad.Media">Media</ion-select-option>
+          <ion-select-option [value]="Prioridad.Alta">Alta</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <!-- Estado actual -->
+        <ion-select label="Estado" labelPlacement="stacked" formControlName="estado">
+          <ion-select-option [value]="Estado.Inicial">Inicial</ion-select-option>
+          <ion-select-option [value]="Estado.EnEjecucion">En ejecución</ion-select-option>
+          <ion-select-option [value]="Estado.Finalizada">Finalizada</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <!-- Clasificación por categoría -->
+        <ion-select label="Categoría" labelPlacement="stacked" formControlName="categoria">
+          <ion-select-option [value]="Categoria.Personal">Personal</ion-select-option>
+          <ion-select-option [value]="Categoria.Trabajo">Trabajo</ion-select-option>
+          <ion-select-option [value]="Categoria.Social">Social</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <!-- Notas u observaciones adicionales -->
+        <ion-textarea label="Notas" labelPlacement="stacked" formControlName="notas" autoGrow="true"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <!-- Fecha/hora para recordatorio (notificación local si está disponible) -->
+        <ion-datetime presentation="date-time" formControlName="recordatorio" label="Recordatorio" labelPlacement="stacked"></ion-datetime>
+      </ion-item>
+    </ion-list>
+
+    <ion-footer class="ion-padding">
+      <!-- Botón de enviar. Deshabilitado si el formulario no es válido -->
+      <ion-button type="submit" expand="block" [disabled]="formulario.invalid">{{ tarea ? 'Guardar cambios' : 'Crear tarea' }}</ion-button>
+    </ion-footer>
+  </form>
+</ion-content>

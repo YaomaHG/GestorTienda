@@ -1,7 +1,7 @@
 {
-  "name": "GestorTienda",
+  "name": "AdminTareas",
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular-standalone"
+  "type": "angular"
 }
