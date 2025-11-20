@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ id ? 'Editar' : 'Nuevo' }} producto</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" [disabled]="form.invalid">Guardar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Reactive form con validaciones mínimas y mensajes de error -->
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <ion-list lines="inset">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.name.touched && form.controls.name.invalid">Nombre requerido</ion-note>
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-input formControlName="description"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Existencias</ion-label>
+        <ion-input type="number" formControlName="stock"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.stock.touched && form.controls.stock.invalid">Stock >= 0</ion-note>
+      <ion-item>
+        <ion-label position="floating">Precio costo</ion-label>
+        <ion-input type="number" formControlName="costPrice"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.costPrice.touched && form.controls.costPrice.invalid">Costo >= 0</ion-note>
+      <ion-item>
+        <ion-label position="floating">Precio venta</ion-label>
+        <ion-input type="number" formControlName="salePrice"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.salePrice.touched && form.controls.salePrice.invalid">Venta >= 0</ion-note>
+      <ion-item>
+        <ion-label position="floating">URL imagen</ion-label>
+        <ion-input formControlName="imageUrl" placeholder="https://..."></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.imageUrl.touched && form.controls.imageUrl.invalid">URL válida (http/https)</ion-note>
+    </ion-list>
+    <div class="ion-padding-top">
+      <!-- Botón deshabilitado mientras el formulario sea inválido -->
+      <ion-button expand="block" type="submit" [disabled]="form.invalid">Guardar</ion-button>
+    </div>
+  </form>
+</ion-content>

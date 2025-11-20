@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Productos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/products/new">
+        <ion-icon slot="start" name="add-circle"></ion-icon>
+        Nuevo
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Buscador por nombre (filtra reactivo con la señal q) -->
+  <ion-searchbar placeholder="Buscar" (ionInput)="onSearch($event)"></ion-searchbar>
+
+  <!-- Listado de productos filtrado -->
+  <ion-list>
+    <ion-item-sliding *ngFor="let p of products()">
+      <ion-item [routerLink]="['/products', p.id]">
+        <ion-thumbnail slot="start">
+          <img [src]="p.imageUrl" alt="{{p.name}}" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ p.name }}</h2>
+          <p>{{ p.description }}</p>
+          <ion-chip color="medium">Stock: {{ p.stock }}</ion-chip>
+          <ion-chip color="success">Venta: {{ p.salePrice | currency }}</ion-chip>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="remove(p.id)">
+          <ion-icon name="trash" slot="start"></ion-icon>
+          Borrar
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <!-- Botón flotante para crear nuevo producto -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/products/new">
+      <ion-icon name="add-circle"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

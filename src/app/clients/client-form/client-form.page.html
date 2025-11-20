@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ id ? 'Editar' : 'Nuevo' }} cliente</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" [disabled]="form.invalid">Guardar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Formulario reactivo con validaciones y mensajes de error -->
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <ion-list lines="inset">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.name.touched && form.controls.name.invalid">Nombre requerido</ion-note>
+      <ion-item>
+        <ion-label position="floating">Domicilio</ion-label>
+        <ion-input formControlName="address"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Teléfono</ion-label>
+        <ion-input formControlName="phone"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.phone.touched && form.controls.phone.invalid">Teléfono requerido</ion-note>
+      <ion-item>
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.email.touched && form.controls.email.invalid">Correo válido requerido</ion-note>
+      <ion-item>
+        <ion-label position="floating">URL imagen</ion-label>
+        <ion-input formControlName="imageUrl" placeholder="https://..."></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.controls.imageUrl.touched && form.controls.imageUrl.invalid">URL válida (http/https)</ion-note>
+    </ion-list>
+    <div class="ion-padding-top">
+      <!-- Guardar deshabilitado si el formulario no es válido -->
+      <ion-button expand="block" type="submit" [disabled]="form.invalid">Guardar</ion-button>
+    </div>
+  </form>
+</ion-content>
